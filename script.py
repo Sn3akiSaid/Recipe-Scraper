@@ -19,7 +19,7 @@ USER_AGENT = {
 
 # from databaser import data_entry
 def url_input(
-    url: str, max_retries: int = 3, initial_delay: int = 1
+    url: str, max_retries: int = 5, initial_delay: int = 1
 ) -> requests.Response:
     """Soupify data"""
     delay = initial_delay
@@ -156,12 +156,16 @@ def cleanup(unformatted_list: list | None) -> list[str]:
     return formatted_list
 
 
+def _run_scraper_(URL):
+    if URL:
+        trial_db = cleanup(finder(json_parser(url_input(URL))))
+    return trial_db
+
+
 if __name__ == "__main__":
     try:
         URL = input("Input your recipe URL: ")
     except Exception as e:
         print(f"No valid url, error {e}")
 
-    if URL:
-        trial_db = cleanup(finder(json_parser(url_input(URL))))
-    print(trial_db)
+    print(_run_scraper_(URL))

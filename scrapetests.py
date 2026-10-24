@@ -8,6 +8,30 @@ TEST_URLS = {
 }
 
 
+TEST_RECIPE_OUTPUTS = {
+    "Homemade baked beans": [
+        "3 tbsp olive oil",
+        "1 onion, finely chopped",
+        "2 fat garlic cloves, finely chopped",
+        "1 tbsp tomato puree",
+        "250ml passata",
+        "2 tsp smoked paprika",
+        "2 tsp tamarind paste (optional)",
+        "1 tsp brown sugar",
+        "1x 570g jar Organic White Beans - with their bean stock (or 2 x 400g tins of Cannellini or Haricot beans, with 150ml veg stock)",
+        "1 tsp dried oregano",
+        "1 tsp dried parsley",
+        "½ tsp dried thyme",
+        "1 tsp ground coriander",
+        "½ tsp cayenne pepper",
+        "1 tsp smoked paprika (additional to what’s in the base recipe)",
+        "1 tsp ground cumin",
+        "1 tsp chipotle paste or powder (optional)",
+        "Pinch of chilli flakes",
+    ]
+}
+
+
 def test_url_input(URL: str) -> list:
     # try:
     #     URL = input("Input your recipe URL: ")
