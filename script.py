@@ -7,9 +7,9 @@ from requests.exceptions import HTTPError, Timeout, RequestException
 from bs4 import BeautifulSoup
 
 USER_AGENT = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5)"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     "AppleWebKit/537.36 (KHTML, like Gecko)"
-    "Chrome/50.0.2661.102 Safari/537.36",
+    "Chrome/155.0.0.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5",
     "Accept-Encoding": "gzip, deflate",
@@ -18,36 +18,49 @@ USER_AGENT = {
 
 
 # from databaser import data_entry
-def url_input(url: str, max_retries: int = 5) -> requests.Response:
+def url_input(
+    url: str, max_retries: int = 3, initial_delay: int = 1
+) -> requests.Response:
     """Soupify data"""
-
-    response = requests.get(url, headers=USER_AGENT, timeout=5)
-    response.raise_for_status()
-    return response
+    delay = initial_delay
+    # response = requests.get(url, headers=USER_AGENT, timeout=5)
+    # response.raise_for_status()
+    # return response
 
     # Error guards, need to fix
-    # try:
-    #     response.raise_for_status()
-    #     return response
-    #         # for attempt in range(max_retries):
-    #         #     response = requests.get(url, headers=USER_AGENT, timeout=(5, 30))
-    #         #     response.raise_for_status()
-    #         #     if response.status_code != 429:
-    #         #         return response
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=USER_AGENT, timeout=(5, 30))
 
-    #         #     retry_after = response.headers.get("Retry-After")
-    #         #     delay = float(retry_after) if retry_after else min(2**attempt, 60)
-    #         #     time.sleep(delay + random.uniform(0, 1))
-    #         #     print(retry_after)
-    #         # raise RuntimeError(f"Still rate limited after {max_retries} retries")
-    #     # except Exception as exc:
-    #     #     print(f"There was a problem: {exc}")
-    # except HTTPError as http_err:
-    #     print(f"HTTP Error occured: {http_err}")
-    # except Timeout as timeout_err:
-    #     print(f"TIMEOUT Error occured: {timeout_err}")
-    # except RequestException as err:
-    #     print(f"REQUEST Error occured: {err}")
+            if response.status_code == 429:
+                print(
+                    f"Rate limited. Attempt {attempt + 1}/{max_retries}. Waiting {delay} seconds..."
+                )
+                # retry_after = response.headers.get("Retry-After")
+                # delay = float(retry_after) if retry_after else min(2**attempt, 60)
+                time.sleep(delay)
+                delay *= 2
+                # print(retry_after)
+                # raise RuntimeError(f"Still rate limited after {max_retries} retries")
+                # except Exception as exc:
+                #     print(f"There was a problem: {exc}")
+            else:
+                response.raise_for_status()
+                return response
+        except HTTPError as http_err:
+            print(f"HTTP Error occured: {http_err}")
+
+        except Timeout as timeout_err:  # Some error at requests.get()
+            print(f"TIMEOUT Error occured: {timeout_err}")
+
+        except RequestException as request_err:
+            print(f"REQUEST Error occured: {request_err}")
+
+            # except Exception as err:
+            #     print(f"HTTP Error occured: {err}")
+            if attempt == max_retries - 1:
+                raise  # Raise final error if max retries reached
+    raise Exception("Max retries reached")
 
 
 # Dated Parsing
@@ -82,7 +95,7 @@ def html_parser(soup):
         except AttributeError:
             helper_method(list_dict, "Ingredients", ingredients)
 
-    return print(list_dict)
+    return list_dict
 
 
 # Dated Parsing
