@@ -95,7 +95,7 @@ def url_input(
 
 
 # Dated Parsing
-def helper_method(data, title_element, ingredient_list):
+def helper_method(data: dict, title_element: str, ingredient_list) -> dict:
     """
     Filters and formats data
     """
@@ -108,7 +108,7 @@ def helper_method(data, title_element, ingredient_list):
     return data
 
 
-def html_parser(soup):
+def html_parser(soup) -> dict:
     """
     Parses HTML and finds ingredient group, works for specific websites only.
     """
@@ -187,7 +187,10 @@ def cleanup(unformatted_list: list | None) -> list[str]:
     return formatted_list
 
 
-def _run_scraper_(URL):
+def _run_scraper_(URL: str) -> list[str]:
+    """
+    Collects all the functions in order and returns the final list
+    """
     if URL:
         trial_db = cleanup(finder(json_parser(url_input(URL))))
     return trial_db
