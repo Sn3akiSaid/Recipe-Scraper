@@ -9,6 +9,24 @@ TEST_URLS = {
 
 
 TEST_RECIPE_OUTPUTS = {
+    "Korean Fried Chicken": [
+        "1.4 kg whole chicken",
+        "2 Tbsp rice wine",
+        "2 tsp minced ginger",
+        "1 tsp fine sea salt",
+        "1/2 tsp ground black pepper",
+        "1 cup potato starch (or corn starch)",
+        "Some cooking oil (for deep frying (I used rice bran oil))",
+        "3 Tbsp tomato sauce ( / ketchup)",
+        "2 Tbsp gochujang ((Korean chilli paste), add 1/2 Tbsp more to make it spicier)",
+        "1/4 cup honey",
+        "1/4 cup brown sugar",
+        "2 Tbsp soy sauce",
+        "2 Tbsp minced garlic",
+        "1 Tbsp sesame oil",
+        "toasted sesame seeds",
+        "green onion (finely chopped or thinly shredded)",
+    ],
     "Homemade baked beans": [
         "3 tbsp olive oil",
         "1 onion, finely chopped",
@@ -28,7 +46,7 @@ TEST_RECIPE_OUTPUTS = {
         "1 tsp ground cumin",
         "1 tsp chipotle paste or powder (optional)",
         "Pinch of chilli flakes",
-    ]
+    ],
 }
 
 
