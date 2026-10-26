@@ -6,22 +6,44 @@ import re
 from requests.exceptions import HTTPError, Timeout, RequestException
 from bs4 import BeautifulSoup
 
-USER_AGENT = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-    "AppleWebKit/537.36 (KHTML, like Gecko)"
-    "Chrome/155.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Accept-Encoding": "gzip, deflate",
-    "Connection": "keep-alive",
-}
+
+# USER_AGENT = {
+#     "User-Agent": ,
+#     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+#     "Accept-Language": "en-US,en;q=0.5",
+#     "Accept-Encoding": "gzip, deflate",
+#     "Connection": "keep-alive",
+# }
+
+
+def get_rnd_usr_agent() -> str:
+    """
+    List pool of user agents
+    Returns a random choice from list
+    """
+    USER_AGENTS_ROT = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko)Chrome/155.0.0.0 Safari/537.36",
+        # Chrome on Mac
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        # Firefox on Windows
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0",
+        # Safari on Mac
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_3_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Safari/605.1.15",
+        # Edge on Windows
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0",
+    ]
+    return random.choice(USER_AGENTS_ROT)
 
 
 # from databaser import data_entry
 def url_input(
     url: str, max_retries: int = 5, initial_delay: int = 1
 ) -> requests.Response:
-    """Soupify data"""
+    """
+    Takes an url string, attempts to make a request to website,
+    does a few retries if timeout present
+    Returns a requests.Response object containing server's response to HTTP request
+    """
     delay = initial_delay
     # response = requests.get(url, headers=USER_AGENT, timeout=5)
     # response.raise_for_status()
@@ -30,7 +52,9 @@ def url_input(
     # Error guards, need to fix
     for attempt in range(max_retries):
         try:
-            response = requests.get(url, headers=USER_AGENT, timeout=(5, 30))
+            response = requests.get(
+                url, headers={"User-Agent": get_rnd_usr_agent()}, timeout=(5, 30)
+            )
 
             if response.status_code == 429:
                 print(
