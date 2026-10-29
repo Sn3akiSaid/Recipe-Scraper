@@ -33,15 +33,6 @@ USER_AGENTS_ROT = [
 ]
 
 
-def get_rnd_usr_agent() -> str:
-    """
-    List pool of user agents
-    Returns a random choice from list
-    """
-
-    return random.choice(USER_AGENTS_ROT)
-
-
 # from databaser import data_entry
 def url_input(
     url: str, max_retries: int = 10, initial_delay: int = 1
@@ -60,7 +51,9 @@ def url_input(
     for attempt in range(max_retries):
         try:
             response = requests.get(
-                url, headers={"User-Agent": get_rnd_usr_agent()}, timeout=(5, 30)
+                url,
+                headers={"User-Agent": random.choice(USER_AGENTS_ROT)},
+                timeout=(5, 30),
             )
 
             if response.status_code == 429:

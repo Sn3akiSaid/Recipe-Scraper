@@ -19,7 +19,7 @@
         {% for recipe in recipes %}
             <tr>
                 <td>{{ recipe.content }}</td>
-                <td>{{ recipe.date_created.date() }}</td>
+                <td>{{ recipe.date_added.date() }}</td>
                 <td>
                     <a href="/delete/{{recipe.id}}">Delete</a>
                     <br>
