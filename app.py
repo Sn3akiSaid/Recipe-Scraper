@@ -10,11 +10,14 @@ db = SQLAlchemy(app)
 
 
 class Recipe(db.Model):
-    __tablename__ = "recipes"
+    __tablename__ = "recipe_table"
+
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
+
     name = db.Column(db.String(200))
-    ingredients = db.relationship("IngredientsList", back_populates="recipe")
+
+    ingredients = db.relationship("Ingredient", back_populates="recipe")
     date_added = db.Column(db.DateTime, default=datetime.now)
 
     # initialize the object
@@ -26,18 +29,21 @@ class Recipe(db.Model):
         return f"<Recipe {self.id}>"
 
 
-class IngredientsList(db.Model):
-    __tablename__ = "ingredients"
+class Ingredient(db.Model):
+    __tablename__ = "ingredient_table"
+
     id = db.Column(db.Integer, primary_key=True)
     ingredient = db.Column(db.String(200), nullable=False)
-    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.id"))
+
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipe_table.id"))
+
+    # Make relationship with back_populates
     recipe = db.relationship("Recipe", back_populates="ingredients")
 
     # initialize the object
-    def __init__(self, ingredient):
+    def __init__(self, ingredient, recipe_id):
         self.ingredient = ingredient
-
-    # date_added = db.Column(db.DateTime, default=datetime.now)
+        self.recipe_id = recipe_id
 
     # Every time a new element is made it will return recipe and id of that recipe that's been created
     def __repr__(self):
@@ -49,13 +55,21 @@ class IngredientsList(db.Model):
 # Can also send data to db
 def index():
     if request.method == "POST":
-        recipe_content = request.form["content"]
-        new_recipe = Recipe(content=recipe_content)
+        recipe_url = request.form["content"]
+        new_recipe = Recipe(content=recipe_url)
+
+        if recipe_url:
+            scraped_ingredients_list = _run_scraper_(recipe_url)
+
         # print(Recipe)
-        recipe_ingredients = _run_scraper_(recipe_content)
+        # scraped_ingredients_list = _run_scraper_(recipe_url)
+
         try:
             db.session.add(new_recipe)
-            # db.session.add(recipe_ingredients)
+            db.session.commit()
+            for ingredient in scraped_ingredients_list:
+                ingredients = Ingredient(ingredient=ingredient, recipe_id=new_recipe.id)
+                db.session.add(ingredients)
             db.session.commit()
             return redirect("/")
         except Exception as e:
@@ -95,6 +109,7 @@ def update(id):
 @app.route("/view_recipe/<int:id>", methods=["GET", "POST"])
 def view_recipe(id):
     recipe = Recipe.query.get_or_404(id)
+    recipe_ingredients = recipe.ingredients
     if request.method == "POST":
         recipe.content = request.form["content"]
         try:
@@ -103,7 +118,9 @@ def view_recipe(id):
         except Exception as e:
             return f"There was an issue opening your recipe: {e}"
     else:
-        return render_template("view_recipe.html", recipe=recipe)
+        return render_template(
+            "view_recipe.html", recipe=recipe, ingredients=recipe_ingredients
+        )
 
 
 if __name__ == "__main__":
