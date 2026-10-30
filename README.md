@@ -1,22 +1,31 @@
 ### Recipe Scraper 
 
-Basic recipe scraper that utilises BeautifulSoup to pull out an ingredient list out of a recipe website.
-Utilizes schema.org standardization to extract a "recipeIngredient" list from recipe websites.
-Rudimentary CRUD app
+A CRUD web app made in Flask that allows a user to add and delete recipe URLs, store them in a SQLAlchemy (SQLite) database, update and view the ingredients list. The web app routes to a Python script that utilises BeautifulSoup and requests for web scraping the URLs.
+The script uses the schema.org convention to extract a "recipeIngredient" list or dict from recipe websites.
 
-Roadmap: Combine script with CRUD app. Deploy on own Linux server.
+This project uses uv to manage the Python version and dependencies, before running use
 
-**Very early stages**
+```
+uv sync
+source .venv/bin/activate
+```
+for macOS and Linux, and:
 
-Run script by
+
+```
+uv sync
+.venv\Scripts\activate
+```
+for Windows.
+
+
+
+** Running just the scraper: **
 ```
 uv run main.py
 ```
 
-Run app by
+** Running the Flask app **
 ```
 uv run app.py
 ```
-
-UPDATE:
-Added early implementation of storage using SQLite3- stores recipe URLs into a database, with the ingredients list linked to each recipe.
