@@ -61,9 +61,6 @@ def index():
         if recipe_url:
             scraped_ingredients_list = _run_scraper_(recipe_url)
 
-        # print(Recipe)
-        # scraped_ingredients_list = _run_scraper_(recipe_url)
-
         try:
             db.session.add(new_recipe)
             db.session.commit()
