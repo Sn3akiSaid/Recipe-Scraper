@@ -20,12 +20,12 @@ for Windows.
 
 
 
-** Running just the scraper: **
+*** Running just the scraper: ***
 ```
-uv run main.py
+uv run script.py
 ```
 
-** Running the Flask app **
+*** Running the Flask app ***
 ```
 uv run app.py
 ```
