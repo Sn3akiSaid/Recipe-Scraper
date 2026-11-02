@@ -1,5 +1,7 @@
 import pytest
-from script import cleanup, finder, json_parser, url_input
+
+# import random
+from script import _run_scraper_
 
 TEST_URLS = {
     "1": "https://mykoreankitchen.com/korean-beef-bone-broth/",
@@ -50,12 +52,10 @@ TEST_RECIPE_OUTPUTS = {
 }
 
 
-def test_url_input(URL: str) -> list:
-    # try:
-    #     URL = input("Input your recipe URL: ")
-    # except Exception as e:
-    #     print(f"No valid url, error {e}")
+def test_run_scraper(URL):
 
-    if URL:
-        trial_db = cleanup(finder(json_parser(url_input(URL))))
-    return trial_db
+    result_2 = _run_scraper_(TEST_URLS["2"])
+    assert result_2 == TEST_RECIPE_OUTPUTS["Korean Fried Chicken"]
+
+    result_3 = _run_scraper_(TEST_URLS["3"])
+    assert result_3 == TEST_RECIPE_OUTPUTS["Homemade baked beans"]
