@@ -89,18 +89,18 @@ def delete(id):
         return f"There was an issue adding your recipe: {e}"
 
 
-@app.route("/update/<int:id>", methods=["GET", "POST"])
-def update(id):
-    recipe = Recipe.query.get_or_404(id)
-    if request.method == "POST":
-        recipe.content = request.form["content"]
-        try:
-            db.session.commit()
-            return redirect("/")
-        except Exception as e:
-            return f"There was an issue adding your recipe: {e}"
-    else:
-        return render_template("update.html", recipe=recipe)
+# @app.route("/update/<int:id>", methods=["GET", "POST"])
+# def update(id):
+#     recipe = Recipe.query.get_or_404(id)
+#     if request.method == "POST":
+#         recipe.content = request.form["content"]
+#         try:
+#             db.session.commit()
+#             return redirect("/")
+#         except Exception as e:
+#             return f"There was an issue adding your recipe: {e}"
+#     else:
+#         return render_template("update.html", recipe=recipe)
 
 
 @app.route("/view_recipe/<int:id>", methods=["GET", "POST"])

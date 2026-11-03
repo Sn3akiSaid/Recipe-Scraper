@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Recipe Master</title>
+<title>Recipe Scraper</title>
 {% endblock %}
 
 {% block body %}
 <div class="content">
     <h1 style="text-align: center;">Recipe {{recipe.content}}</h1>
 
-    <!-- <form action="/view_ingredient/{{recipe.id}}" method="GET">
+    <form action="/view_ingredient/{{recipe.id}}" method="GET">
         <input type="url" name="content" id="content" value="{{recipe.content}}">
         <input type="submit" value="Update">
-    </form> -->
+    </form>
+
     {% if ingredients|length < 1 %}
     <h4 style="text-align: center;">No ingredients!</h4>
     {% else %}
